@@ -254,6 +254,12 @@ LatexCmds.f = P(Letter, function(_, super_) {
 });
 
 // VanillaSymbol's
+
+//HACK support spaces
+//spaces will be imported and exported as '\:'
+//CharCmds[' '] = bind(VanillaSymbol, '\\:', ' ');
+LatexCmds['kksp'] = CharCmds[' '] = bind(VanillaSymbol, '\\:', ' ');
+//*-HACK support spaces-*
 LatexCmds[' '] = LatexCmds.space = bind(VanillaSymbol, '\\ ', '&nbsp;');
 
 LatexCmds["'"] = LatexCmds.prime = bind(VanillaSymbol, "'", '&prime;');

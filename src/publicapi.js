@@ -97,6 +97,30 @@ function getInterface(v) {
     EMBEDS[name] = options;
   };
 
+    //HACK: this method transform a command to another command 
+    //TODO: it's not a good fix. Rethink of it.
+    //*-* start *-*
+  var transform = function (latex) {
+      //HACK: add command mathbb. This modification make mathquill support mathbb
+      //  ex: mathbb{N} --> N
+      // because currently, MathQuill supports for \N,\Q,\Z,\R, so we will transfrom 'mathbb' to the 
+      // existing form of \N,\Q,\Z,\R
+      if (latex.indexOf('mathbb') != -1) {
+          latex = latex.replace(/mathbb{N}/g, 'N')
+                       .replace(/mathbb{Q}/g, 'Q')
+                       .replace(/mathbb{Z}/g, 'Z')
+                       .replace(/mathbb{R}/g, 'R');
+      }
+      //because '\' is a escape character, i haven't fonud better solution for importing spaces
+      //with associates latex '\:'.
+      //we need transform \: to a command named: '\kksp{}' so that we can import spaces with this.
+      //it's is too HACKY but it works fine utils i find better solution. 
+      if (latex.match(/\\:/)) {
+          latex = latex.replace(/\\:/g, '\\kksp{}');
+      }
+      return latex;
+  }
+
   var AbstractMathQuill = APIClasses.AbstractMathQuill = P(Progenote, function(_) {
     _.init = function(ctrlr) {
       this.__controller = ctrlr;
@@ -123,7 +147,12 @@ function getInterface(v) {
     _.el = function() { return this.__controller.container[0]; };
     _.text = function() { return this.__controller.exportText(); };
     _.latex = function(latex) {
-      if (arguments.length > 0) {
+        if (arguments.length > 0) {
+        //HACK support mathbb. 
+        //TODO: It may not a good fix. Rethink of this.
+        //-*- start
+        latex = transform(latex);
+        //-*- end
         this.__controller.renderLatexMath(latex);
         if (this.__controller.blurred) this.__controller.cursor.hide().parent.blur();
         return this;
@@ -142,6 +171,7 @@ function getInterface(v) {
       return this;
     };
   });
+
   MQ.prototype = AbstractMathQuill.prototype;
 
   APIClasses.EditableField = P(AbstractMathQuill, function(_, super_) {
@@ -228,6 +258,39 @@ function getInterface(v) {
       this.__controller.cursor.options.ignoreNextMousedown = fn;
       return this;
     };
+      // for purpose: do something after a key is pressed
+    _.setOnKeyDownFn = function (fn) {
+        this.__controller.onKeyDownFns = fn;
+        return this;
+    };
+    // for purpose: do show cursor after a string
+    _.showCursorAfter = function (latex) {
+      
+        var cursor = this.__controller.cursor;
+        if (latex == "end") {
+            this.__controller.notify('move').cursor.insAtRightEnd(this.__controller.root);
+
+            return;
+        } else if (latex == "start") {
+           
+            this.__controller.notify('move').cursor.insAtLeftEnd(this.__controller.root);
+
+            return;
+        }
+       
+        this.__controller.notify('move').cursor.insAtLeftEnd(this.__controller.root);
+        while (cursor[R]) {
+            cursor = cursor[R];
+            if (cursor.ctrlSeq == latex) {
+               
+                this.__controller.seek(cursor.jQ);
+                return;
+            }
+        }
+      
+        return this;
+    };
+      //add end 
   });
   MQ.EditableField = function() { throw "wtf don't call me, I'm 'abstract'"; };
   MQ.EditableField.prototype = APIClasses.EditableField.prototype;
