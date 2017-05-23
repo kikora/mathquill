@@ -290,6 +290,25 @@ function getInterface(v) {
       
         return this;
     };
+
+    _.multilanguage = function (latex) {
+        switch (latex) {
+            case 'cdot':
+                CharCmds['*'] = LatexCmds.sdot = LatexCmds.cdot = bind(BinaryOperator, '\\cdot ', '&middot;');
+                LatexCmds[':'] = LatexCmds['÷'] = LatexCmds.div = LatexCmds.divide = LatexCmds.divides = bind(BinaryOperator, ':', ':', '[/]');
+                break;
+            default:
+                CharCmds['*'] = LatexCmds.times = bind(BinaryOperator, '\\times ', '&times;', '[x]');
+                LatexCmds[':'] = LatexCmds['÷'] = LatexCmds.div = LatexCmds.divide = LatexCmds.divides = bind(BinaryOperator, '\\div ', '&divide;', '[/]');
+        }
+    };
+    _.backspace = function () {
+        this.__controller.backspace();
+    };
+    _.getCursor = function () {
+        this.__controller.cursor;
+     
+    };
       //add end 
   });
   MQ.EditableField = function() { throw "wtf don't call me, I'm 'abstract'"; };
