@@ -6,7 +6,36 @@ Controller.open(function(_) {
   Options.p.ignoreNextMousedown = noop;
   _.delegateMouseEvents = function() {
     var ultimateRootjQ = this.root.jQ;
-    //drag-to-select event handling
+
+      //HACK - Selecting text in input editor PC 
+      //https://redmine.orientsoftware.net/issues/13376
+      //Start
+    this.container.bind('dblclick.mathquill', function (e) {
+        var rootjQ = $(e.target).closest('.mq-root-block');
+        var root = Node.byId[rootjQ.attr(mqBlockId) || ultimateRootjQ.attr(mqBlockId)];
+        var ctrlr = root.controller, cursor = ctrlr.cursor, blink = cursor.blink;
+        var anticursor, blink = cursor.blink, selectAllTimeOut;
+        anticursor = Point(cursor.parent, cursor[L], cursor[R]);
+        ctrlr.moveRight();
+        selectAllTimeOut = true;
+        if (cursor[L] !== anticursor[L]
+            || cursor.parent !== anticursor.parent) {
+            //   cursor.selectFrom(anticursor);
+            if (!cursor.anticursor) cursor.startSelection();
+            ctrlr.seek($(e.target), e.pageX, e.pageY).cursor.select();
+        }
+        setTimeout(function () {
+            selectAllTimeOut = false;
+        }, 300);
+        e.preventDefault();
+        return false;
+    });
+
+      //HACK - Selecting text in input editor PC 
+      //https://redmine.orientsoftware.net/issues/13376
+      //End
+
+      //drag-to-select event handling
     this.container.bind('mousedown.mathquill', function(e) {
       var rootjQ = $(e.target).closest('.mq-root-block');
       var root = Node.byId[rootjQ.attr(mqBlockId) || ultimateRootjQ.attr(mqBlockId)];
