@@ -446,7 +446,14 @@ CharCmds['/'] = P(Fraction, function(_, super_) {
           leftward instanceof (LatexCmds.text || noop) ||
           leftward instanceof SummationNotation ||
           leftward.ctrlSeq === '\\ ' ||
-          /^[,;:]$/.test(leftward.ctrlSeq)
+          //HACK: use space as a separator for fractions instead of comma 
+          //In Scandinavia, comma works as the decimal point.We need to input a dicimal as a numerator. 
+          //And in some case (such as: input coordinate, space will works as 
+          //separator of x and y) we need space works as a separator for fractions
+          //original source is commented out as below.
+          //',;:'.split('').indexOf(leftward.ctrlSeq) > -1
+          ["\\:",";",":"].indexOf(leftward.ctrlSeq) > -1
+          //*--HACK: use space as a separator for fractions instead of comma --*
         ) //lookbehind for operator
       ) leftward = leftward[L];
 
