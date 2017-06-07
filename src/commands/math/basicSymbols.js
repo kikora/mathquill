@@ -367,6 +367,11 @@ LatexCmds.Upsih = //'cos it makes sense to me
   bind(Symbol,'\\Upsilon ','<var style="font-family: serif">&upsih;</var>'); //Symbola's 'upsilon with a hook' is a capital Y without hooks :(
 
 //other symbols with the same LaTeX command and HTML character entity reference
+//*-* HACK support export Upper-Case Alpha and Upper-Case Beta 
+//*-* start
+LatexCmds.Alpha =
+LatexCmds.Beta =
+//*-* end
 LatexCmds.Gamma =
 LatexCmds.Delta =
 LatexCmds.Theta =
@@ -510,6 +515,7 @@ LatexCmds['<'] = LatexCmds.lt = bind(Inequality, less, true);
 LatexCmds['>'] = LatexCmds.gt = bind(Inequality, greater, true);
 LatexCmds['≤'] = LatexCmds.le = LatexCmds.leq = bind(Inequality, less, false);
 LatexCmds['≥'] = LatexCmds.ge = LatexCmds.geq = bind(Inequality, greater, false);
+LatexCmds['|'] = bind(BinaryOperator, '|', '|');
 
 var Equality = P(BinaryOperator, function(_, super_) {
   _.init = function() {
