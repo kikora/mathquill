@@ -199,16 +199,32 @@ var saneKeyboardEvents = (function() {
       //   reliable as our tests are comprehensive
       // If anything like #40 or #71 is reported in IE < 9, see
       // b1318e5349160b665003e36d4eedd64101ceacd8
-      if (hasSelection()) return;
+        if (hasSelection()) return;
 
+        //HACK - [Calculate tab][Ipad] Typing ^ external keyboard disables keyboard input
+        //https://redmine.orientsoftware.net/issues/18557
+        //Start
+      if (textarea[0].select) {
+          textarea[0].select();
+      }
+     
       var text = textarea.val();
-      if (text.match(/\^[\w-]/)) text = text.slice(-1);
-      if (text.length === 1) {
+      if (text.indexOf('^') >= 0 && text.length > 1) {
+
+          text = text.slice(-1);
+
+      }
+      //if (text.match(/\^[\w-]/)) text = text.slice(-1);
+      if (text.length > 0) {
         textarea.val('');
         handlers.typedText(text);
       } // in Firefox, keys that don't type text, just clear seln, fire keypress
       // https://github.com/mathquill/mathquill/issues/293#issuecomment-40997668
       else if (text && textarea[0].select) textarea[0].select(); // re-select if that's why we're here
+
+        //HACK - [Calculate tab][Ipad] Typing ^ external keyboard disables keyboard input
+        //https://redmine.orientsoftware.net/issues/18557
+        //End
     }
 
     function onBlur() { keydown = keypress = null; }
