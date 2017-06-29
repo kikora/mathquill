@@ -143,6 +143,15 @@ var saneKeyboardEvents = (function() {
       var dom = textarea[0];
 
       if (!('selectionStart' in dom)) return false;
+        //HACK - [Mathquill][iPad] Cursor should jump as soon as typing ^
+        //https://redmine.orientsoftware.net/issues/18565
+        //Start
+      if (textarea.val() === '^') {
+          return false;
+      }
+        //HACK - [Mathquill][iPad] Cursor should jump as soon as typing ^
+        //https://redmine.orientsoftware.net/issues/18565
+        //End
       return dom.selectionStart !== dom.selectionEnd;
     }
 
