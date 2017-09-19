@@ -213,9 +213,9 @@ var saneKeyboardEvents = (function() {
         //HACK - [Calculate tab][Ipad] Typing ^ external keyboard disables keyboard input
         //https://redmine.orientsoftware.net/issues/18557
         //Start
-      if (textarea[0].select) {
-          textarea[0].select();
-      }
+      //if (textarea[0].select) {
+      //    textarea[0].select();
+      //}
      
       var text = textarea.val();
       if (text.indexOf('^') >= 0 && text.length > 1) {
