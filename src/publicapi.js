@@ -150,7 +150,8 @@ function getInterface(v) {
         if (arguments.length > 0) {
         //HACK support mathbb. 
         //TODO: It may not a good fix. Rethink of this.
-        //-*- start
+            //-*- start
+        latex = latex.replace(/\ /g, '\\:');
         latex = transform(latex);
         //-*- end
         this.__controller.renderLatexMath(latex);

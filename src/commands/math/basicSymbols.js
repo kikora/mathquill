@@ -102,7 +102,11 @@ var Letter = P(Variable, function(_, super_) {
     if (dir !== L && this[R] instanceof Letter) return;
     this.autoUnItalicize(opts);
   };
-  _.autoUnItalicize = function(opts) {
+  _.autoUnItalicize = function (opts) {
+      //HACK 18622 [Calculate tab] Can't click in expression with ln(...), log(...), sin(...) etc in them.
+      //-** start
+      return;
+      //-** ends
     var autoOps = opts.autoOperatorNames;
     if (autoOps._maxLength === 0) return;
     // want longest possible operator names, so join together entire contiguous
@@ -171,26 +175,26 @@ var AutoOpNames = Options.p.autoOperatorNames = { _maxLength: 9 }; // the set
   // of operator names that MathQuill auto-unitalicizes by default; overridable
 var TwoWordOpNames = { limsup: 1, liminf: 1, projlim: 1, injlim: 1 };
 (function() {
-  //var mostOps = ('arg deg det dim exp gcd hom inf ker lg lim ln log max min sup'
-  //               + ' limsup liminf injlim projlim Pr').split(' ');
-  //for (var i = 0; i < mostOps.length; i += 1) {
-  //  BuiltInOpNames[mostOps[i]] = AutoOpNames[mostOps[i]] = 1;
-  //}
+  var mostOps = ('arg deg det dim exp gcd hom inf ker lg lim ln log max min sup'
+                 + ' limsup liminf injlim projlim Pr').split(' ');
+  for (var i = 0; i < mostOps.length; i += 1) {
+    BuiltInOpNames[mostOps[i]] = AutoOpNames[mostOps[i]] = 1;
+  }
 
-  //var builtInTrigs = // why coth but not sech and csch, LaTeX?
-  //  'sin cos tan arcsin arccos arctan sinh cosh tanh sec csc cot coth'.split(' ');
-  //for (var i = 0; i < builtInTrigs.length; i += 1) {
-  //  BuiltInOpNames[builtInTrigs[i]] = 1;
-  //}
+  var builtInTrigs = // why coth but not sech and csch, LaTeX?
+    'sin cos tan arcsin arccos arctan sinh cosh tanh sec csc cot coth'.split(' ');
+  for (var i = 0; i < builtInTrigs.length; i += 1) {
+    BuiltInOpNames[builtInTrigs[i]] = 1;
+  }
 
-  //var autoTrigs = 'sin cos tan sec cosec csc cotan cot ctg'.split(' ');
-  //for (var i = 0; i < autoTrigs.length; i += 1) {
-  //  AutoOpNames[autoTrigs[i]] =
-  //  AutoOpNames['arc'+autoTrigs[i]] =
-  //  AutoOpNames[autoTrigs[i]+'h'] =
-  //  AutoOpNames['ar'+autoTrigs[i]+'h'] =
-  //  AutoOpNames['arc'+autoTrigs[i]+'h'] = 1;
-  //}
+  var autoTrigs = 'sin cos tan sec cosec csc cotan cot ctg'.split(' ');
+  for (var i = 0; i < autoTrigs.length; i += 1) {
+    AutoOpNames[autoTrigs[i]] =
+    AutoOpNames['arc'+autoTrigs[i]] =
+    AutoOpNames[autoTrigs[i]+'h'] =
+    AutoOpNames['ar'+autoTrigs[i]+'h'] =
+    AutoOpNames['arc'+autoTrigs[i]+'h'] = 1;
+  }
 
   // compat with some of the nonstandard LaTeX exported by MathQuill
   // before #247. None of these are real LaTeX commands so, seems safe
