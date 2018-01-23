@@ -785,11 +785,11 @@ LatexCmds.binom =
 LatexCmds.binomial = P(P(MathCommand, DelimsMixin), function(_, super_) {
   _.ctrlSeq = '\\binom';
   _.htmlTemplate =
-      '<span class="mq-non-leaf">'
+      '<span class="mq-non-leaf binom-wrapper">'
     +   '<span class="mq-paren mq-scaled">(</span>'
     +   '<span class="mq-non-leaf">'
     +     '<span class="mq-array mq-non-leaf">'
-    +       '<span>&0</span>'
+    +       '<span class="binom-top">&0</span>'
     +       '<span>&1</span>'
     +     '</span>'
     +   '</span>'

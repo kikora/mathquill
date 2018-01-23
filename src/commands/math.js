@@ -272,8 +272,15 @@ var MathCommand = P(MathElement, function(_, super_) {
 
   // methods to export a string representation of the math tree
   _.latex = function() {
-    return this.foldChildren(this.ctrlSeq, function(latex, child) {
-      return latex + '{' + (child.latex() || ' ') + '}';
+      return this.foldChildren(this.ctrlSeq, function (latex, child) {
+          //HACK - [PC][Handheld][Minput][Text Minput] Add nCr as new math symbol - #18716
+          //https://redmine.orientsoftware.net/issues/18718 
+          //Start
+        //  return latex + '{' + (child.latex() || ' ') + '}';
+          return latex + '{' + (child.latex()) + '}';
+          //HACK - [PC][Handheld][Minput][Text Minput] Add nCr as new math symbol - #18716
+          //https://redmine.orientsoftware.net/issues/18718 
+          //End
     });
   };
   _.textTemplate = [''];
