@@ -151,7 +151,7 @@ function getInterface(v) {
         //HACK support mathbb. 
         //TODO: It may not a good fix. Rethink of this.
             //-*- start
-        latex = latex.replace(/\ /g, '\\:');
+        //latex = latex.replace(/\ /g, '\\:');
         latex = transform(latex);
         //-*- end
         this.__controller.renderLatexMath(latex);
