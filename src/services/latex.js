@@ -26,7 +26,7 @@ var latexMathParser = (function() {
   // Parsers yielding either MathCommands, or Fragments of MathCommands
   //   (either way, something that can be adopted by a MathBlock)
   var variable = letter.map(function(c) { return Letter(c); });
-  var symbol = regex(/^[^${}\\_^]/).map(function(c) { return VanillaSymbol(c); });
+  var symbol = regex(/^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]|[^${}\\_^])/).map(function(c) { return VanillaSymbol(c); });
 
   var controlSequence =
     regex(/^[^\\a-eg-zA-Z]/) // hotfix #164; match MathBlock::write
